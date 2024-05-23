@@ -222,7 +222,13 @@ class _JiggyWaitListScreenState extends State<JiggyWaitListScreen> {
               constraints: const BoxConstraints(maxWidth: 790),
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: screenWidth > 820 ? 0 : 12),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: screenWidth > 820
+                        ? 0
+                        : screenWidth > 750 && screenWidth <= 820
+                            ? 16
+                            : 12,
+                  ),
                   child: Column(
                     crossAxisAlignment:
                         screenWidth > 450 ? CrossAxisAlignment.start : CrossAxisAlignment.center,
@@ -576,55 +582,58 @@ class _JiggyWaitListScreenState extends State<JiggyWaitListScreen> {
                       ),
                       ConstrainedBox(
                         constraints: BoxConstraints(
-                            maxHeight: screenWidth > 795 ? 783 : 1407, maxWidth: 783),
+                            maxHeight: screenWidth > 795 ? 783 : 1650, maxWidth: 783),
                         child: Column(
                           crossAxisAlignment: screenWidth > 450
                               ? CrossAxisAlignment.start
                               : CrossAxisAlignment.center,
-                          children: screenWidth > 780
+                          children: screenWidth > 795
                               ? reasonsWhyJiggyIsCoolOnWeb(screenWidth)
                               : reasonsWhyJiggyIsCoolOnMobile(screenWidth),
                         ),
                       ),
-                      SizedBox(height: 60),
-                      Column(
-                        children: [
-                          Text(
-                            "Your campus, Your secret, Your story.",
-                            style: TextStyle(
-                              fontSize: screenWidth > 450 ? 24 : 17.5,
-                              color: AppColors.kWhite,
-                              fontFamily: workSans,
+                      screenWidth > 795 ? const SizedBox.shrink() : const SizedBox(height: 40),
+                      Align(
+                        alignment: AlignmentDirectional.bottomCenter,
+                        child: Column(
+                          children: [
+                            Text(
+                              "Your campus, Your secret, Your story.",
+                              style: TextStyle(
+                                fontSize: screenWidth > 450 ? 24 : 17.5,
+                                color: AppColors.kWhite,
+                                fontFamily: workSans,
+                              ),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          SizedBox(
-                            width: screenWidth > 450 ? 288 : 210,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children:
-                                  socialMediaIcons.map((aSocialMediaIconInSocialMediaIconsList) {
-                                return Image.asset(
-                                  aSocialMediaIconInSocialMediaIconsList,
-                                  scale: screenWidth > 450 ? 3.0 : 4.0,
-                                );
-                              }).toList(),
+                            const SizedBox(
+                              height: 15,
                             ),
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          Text(
-                            "©️ All Rights Reserved. Jiggy social",
-                            style: TextStyle(
-                              fontSize: screenWidth > 450 ? 20 : 14.6,
-                              color: AppColors.kWhite,
-                              fontFamily: workSans,
+                            SizedBox(
+                              width: screenWidth > 450 ? 288 : 210,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children:
+                                    socialMediaIcons.map((aSocialMediaIconInSocialMediaIconsList) {
+                                  return Image.asset(
+                                    aSocialMediaIconInSocialMediaIconsList,
+                                    scale: screenWidth > 450 ? 3.0 : 4.0,
+                                  );
+                                }).toList(),
+                              ),
                             ),
-                          ),
-                        ],
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            Text(
+                              "©️ All Rights Reserved. Jiggy social",
+                              style: TextStyle(
+                                fontSize: screenWidth > 450 ? 20 : 14.6,
+                                color: AppColors.kWhite,
+                                fontFamily: workSans,
+                              ),
+                            ),
+                          ],
+                        ),
                       )
                     ],
                   ),
