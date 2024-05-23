@@ -12,4 +12,5 @@ class AppImages {
   static const tiktokIcon = "${_base_url}tiktok_icon.png";
   static const twitchIcon = "${_base_url}twitch_icon.png";
   static const twitterIcon = "${_base_url}twitter_icon.png";
+  static const dropdownIcon = "${_base_url}drop_down.png";
 }
