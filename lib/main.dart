@@ -1,7 +1,6 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:jiggy_waitlist/src/config.dart';
 import 'package:jiggy_waitlist/src/components.dart';
 import 'package:jiggy_waitlist/src/utils.dart';
