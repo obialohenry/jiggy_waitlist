@@ -14,4 +14,6 @@ class AppColors {
   static const kBlueDeep = Color(0xff656EF4);
   static const kPinkDeep = Color(0xff450D33);
   static const kRedTrans = Color(0xff7B1047);
+  static const kBlack200 = Color(0xff1E1E1E);
+  static const kBlack20 = Color(0xff8E8E93);
 }

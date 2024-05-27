@@ -1,4 +1,7 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:jiggy_waitlist/src/config.dart';
 import 'package:jiggy_waitlist/src/components.dart';
 import 'package:jiggy_waitlist/src/utils.dart';
@@ -15,9 +18,11 @@ class JiggyWaitlistApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: JiggyWaitListScreen(),
+      home: const JiggyWaitListScreen(),
+      builder: BotToastInit(),
+      navigatorObservers: [BotToastNavigatorObserver()],
     );
   }
 }
@@ -31,18 +36,18 @@ class JiggyWaitListScreen extends StatefulWidget {
 
 class _JiggyWaitListScreenState extends State<JiggyWaitListScreen> {
   List<String> schools = [
-    "Federal University Of Technology Owerri",
-    "Federal University Of Technology Akurre",
-    "University Of Port-HarCourt",
-    "Rivers State University",
-    "Abia State University",
+    futo,
+    futa,
+    uniport,
+    rsust,
+    absu,
   ];
   List<String> states = [
-    "Imo State",
-    "Lagos State",
-    "Rivers State",
-    "Abuja State",
-    "Akwa-Ibom State",
+    imoState,
+    lagosState,
+    riversState,
+    abujaState,
+    akwaIbomState,
   ];
 
   List<String> socialMediaIcons = [
@@ -54,7 +59,7 @@ class _JiggyWaitListScreenState extends State<JiggyWaitListScreen> {
     AppImages.tiktokIcon,
     AppImages.twitchIcon,
   ];
-  String date = "00/00/28";
+  String date = defaultDate;
 
   Future<void> selectDate(BuildContext context) {
     return showDatePicker(
@@ -82,57 +87,45 @@ class _JiggyWaitListScreenState extends State<JiggyWaitListScreen> {
       AReasonWhyItsCool(
         isOnMobile: true,
         screenWidth: screenWidth,
-        title: "Secret Stories",
-        subText: "No judgement: Ever wanted to spill the tea without the drama? "
-            "jiggy's anonymous posting feature lets you share your juciest stories, deepest thoughts and craziest "
-            "campus adventures without fear of judgement. "
-            "Your secrets are safe with us!",
-        actionText: "Generated names",
+        title: secretStories,
+        subText: secretStoriesSubText,
+        actionText: generatedNames,
         color: AppColors.kBlueDeep,
         onTap: () {},
       ),
       AReasonWhyItsCool(
         isOnMobile: true,
         screenWidth: screenWidth,
-        title: "Tailored For Campus Life",
-        subText: "Jiggy is all about enhancing the college experience. "
-            "From sharing campus stories to organizing events, "
-            "Jiggy is your go-to platform for everything campus-related",
-        actionText: "College centric",
+        title: tailoredForCampusLife,
+        subText: tailoredForCampusLifeSubText,
+        actionText: collegeCentric,
         color: AppColors.kBrown100,
         onTap: () {},
       ),
       AReasonWhyItsCool(
         isOnMobile: true,
         screenWidth: screenWidth,
-        title: "Connect With Different Mates",
-        subText: "with jiggy, you can easily stay connected with your "
-            "new people from other colleges, classmates, and even that cool "
-            "guy/girl from your GST class who sits in the back row. Say goodbye to "
-            "FOMO and hello to endless hangouts!",
-        actionText: "College centric",
+        title: connectWithDifferentMates,
+        subText: connectWithDifferentMatesSubText,
+        actionText: collegeCentric,
         color: AppColors.kPinkDeep,
         onTap: () {},
       ),
       AReasonWhyItsCool(
         isOnMobile: true,
         screenWidth: screenWidth,
-        title: "Stay In The Loop",
-        subText: "From campus news and events to exclusive deals and discounts, "
-            "jiggy keeps you in the loop with all things college life. Never miss "
-            "a beat with our curated feed of campus happenings and must-know info",
-        actionText: "Information",
+        title: stayInTheLoop,
+        subText: stayInTheLoopSubText,
+        actionText: information,
         color: AppColors.kRedTrans,
         onTap: () {},
       ),
       AReasonWhyItsCool(
         isOnMobile: true,
         screenWidth: screenWidth,
-        title: "Did Someone Say Prizes",
-        subText: "Get ready to flex those brain muscles and show off your campus knowledge!\n"
-            "Participate in jiggy quizzes, challenges, and scavenger hunts for a chance to win "
-            "epic prizes and bragging rights among your peers.",
-        actionText: "Algorithm based",
+        title: didSomeoneSayPrizes,
+        subText: didSomeoneSayPrizesSubText,
+        actionText: algorithmBased,
         color: AppColors.kBrown100,
         onTap: () {},
       ),
@@ -145,26 +138,27 @@ class _JiggyWaitListScreenState extends State<JiggyWaitListScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AReasonWhyItsCool(
-            isOnMobile: false,
-            screenWidth: screenWidth,
-            title: "Tailored For Campus Life",
-            subText: "Jiggy is all about enhancing the college experience. "
-                "From sharing campus stories to organizing events, "
-                "Jiggy is your go-to platform for everything campus-related",
-            actionText: "gameplay-based engine",
-            color: AppColors.kBrown100,
-            onTap: () {},
+          Expanded(
+            child: AReasonWhyItsCool(
+              isOnMobile: false,
+              screenWidth: screenWidth,
+              title: tailoredForCampusLife,
+              subText: tailoredForCampusLifeSubText,
+              actionText: gamePlayBasedEngine,
+              color: AppColors.kBrown100,
+              onTap: () {},
+            ),
           ),
-          AReasonWhyItsCool(
-            isOnMobile: false,
-            screenWidth: screenWidth,
-            title: "Anonymity",
-            subText: "With jiggy, users can share their experiences anonymously, "
-                "fostering a safe and open environment for genuine connections and conversations",
-            actionText: "teammates and friends",
-            color: AppColors.kBlueDeep,
-            onTap: () {},
+          Expanded(
+            child: AReasonWhyItsCool(
+              isOnMobile: false,
+              screenWidth: screenWidth,
+              title: anonymity,
+              subText: anonymitySubText,
+              actionText: teammatesAndFriends,
+              color: AppColors.kBlueDeep,
+              onTap: () {},
+            ),
           ),
         ],
       ),
@@ -175,26 +169,27 @@ class _JiggyWaitListScreenState extends State<JiggyWaitListScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AReasonWhyItsCool(
-            isOnMobile: false,
-            screenWidth: screenWidth,
-            title: "Random Calls",
-            subText: "Want to meet new people? jiggy's random video call feature "
-                "lets you connect with other users on your campus in an instant, "
-                "making it easy to forge new friendships.",
-            actionText: "gameplay-based engine",
-            color: AppColors.kBrown100,
-            onTap: () {},
+          Expanded(
+            child: AReasonWhyItsCool(
+              isOnMobile: false,
+              screenWidth: screenWidth,
+              title: randomCalls,
+              subText: randomCallsSubText,
+              actionText: gamePlayBasedEngine,
+              color: AppColors.kBrown100,
+              onTap: () {},
+            ),
           ),
-          AReasonWhyItsCool(
-            isOnMobile: false,
-            screenWidth: screenWidth,
-            title: "Exclusive Campus News",
-            subText: "Stay in the loop with the latest campus news, "
-                "events, and updates tailored to your university",
-            actionText: "teammates and friends",
-            color: AppColors.kBlueDeep,
-            onTap: () {},
+          Expanded(
+            child: AReasonWhyItsCool(
+              isOnMobile: false,
+              screenWidth: screenWidth,
+              title: exclusiveCampusNews,
+              subText: exclusiveCampusNewsSubText,
+              actionText: teammatesAndFriends,
+              color: AppColors.kBlueDeep,
+              onTap: () {},
+            ),
           ),
         ],
       ),
@@ -231,7 +226,7 @@ class _JiggyWaitListScreenState extends State<JiggyWaitListScreen> {
                   ),
                   child: Column(
                     crossAxisAlignment:
-                        screenWidth > 450 ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+                        CrossAxisAlignment.center,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -270,7 +265,7 @@ class _JiggyWaitListScreenState extends State<JiggyWaitListScreen> {
                                                 width: 15,
                                               ),
                                               Text(
-                                                "About",
+                                                about,
                                                 style: TextStyle(
                                                   fontSize: 14,
                                                   color: AppColors.kWhite,
@@ -304,7 +299,7 @@ class _JiggyWaitListScreenState extends State<JiggyWaitListScreen> {
                                           width: 15,
                                         ),
                                         const Text(
-                                          "Join beta",
+                                          joinBeta,
                                           style: TextStyle(
                                             fontSize: 14,
                                             color: AppColors.kBlack,
@@ -324,22 +319,16 @@ class _JiggyWaitListScreenState extends State<JiggyWaitListScreen> {
                         height: 60,
                       ),
                       Column(
-                        crossAxisAlignment: screenWidth > 450
-                            ? CrossAxisAlignment.start
-                            : CrossAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Column(
-                            crossAxisAlignment: screenWidth > 450
-                                ? CrossAxisAlignment.start
-                                : CrossAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Row(
-                                mainAxisAlignment: screenWidth <= 450
-                                    ? MainAxisAlignment.center
-                                    : MainAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "Join",
+                                    join,
                                     style: TextStyle(
                                       color: AppColors.kWhite,
                                       fontSize: screenWidth > 450 ? 56 : 27.5,
@@ -363,7 +352,7 @@ class _JiggyWaitListScreenState extends State<JiggyWaitListScreen> {
                                     width: 12,
                                   ),
                                   Text(
-                                    "Waitlist",
+                                    waitlist,
                                     style: TextStyle(
                                       color: AppColors.kWhite,
                                       fontSize: screenWidth > 450 ? 56 : 27.5,
@@ -374,7 +363,7 @@ class _JiggyWaitListScreenState extends State<JiggyWaitListScreen> {
                                 ],
                               ),
                               Text(
-                                "Your Campus, Your Story, Your Secret",
+                                yourCampusYourStoryYourSecret,
                                 style: TextStyle(
                                   color: AppColors.kWhite,
                                   fontSize: screenWidth > 450 ? 36 : 17.6,
@@ -390,11 +379,7 @@ class _JiggyWaitListScreenState extends State<JiggyWaitListScreen> {
                           ConstrainedBox(
                             constraints: const BoxConstraints(maxWidth: 609),
                             child: Text(
-                              "Unlock the ultimate campus experience with Jiggy - the "
-                              "social networking app designed exclusively for college "
-                              "students, join our waitlist today and be among the first to "
-                              "experience the magic of jiggy. Connect, share, and discover "
-                              "your campus like never before. Your journey starts here.",
+                              unlockTheUltimateCampusExperienceWithJiggy,
                               style: TextStyle(
                                 fontSize: screenWidth > 450 ? 20 : 15,
                                 fontFamily: screenWidth > 450 ? workSans : lato,
@@ -413,7 +398,7 @@ class _JiggyWaitListScreenState extends State<JiggyWaitListScreen> {
                             : CrossAxisAlignment.center,
                         children: [
                           Text(
-                            screenWidth > 450 ? "                    Early Access" : "Early Access",
+                            screenWidth > 450 ? "                    $earlyAccess" : earlyAccess,
                             style: const TextStyle(
                               color: AppColors.kWhite,
                               fontSize: 32,
@@ -429,13 +414,7 @@ class _JiggyWaitListScreenState extends State<JiggyWaitListScreen> {
                             child: const Text(
                               softWrap: true,
                               textAlign: TextAlign.center,
-                              "By joining the waitlist, you'll be among the first to experience all that jiggy "
-                              "has to offer, giving you exclusive access to new features and updates "
-                              "before anyone else, In short, jiggy is cool because it's not just a social "
-                              "networking app - it's a community-driven platform that celebrates campus "
-                              "life and fosters genuine connections among college students."
-                              "Sounds cool right? join the waitlist and get awesome rewards upon launch "
-                              "such as unique names, coins, free data, etc.",
+                              byJoiningTheWaitlistTextAndOffers,
                               style: TextStyle(
                                 color: AppColors.kWhite,
                                 fontSize: 16,
@@ -457,18 +436,18 @@ class _JiggyWaitListScreenState extends State<JiggyWaitListScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const CustomTextField(
-                              hintText: "Email",
+                              hintText: email,
                               keyboardType: TextInputType.text,
-                              label: "Email",
+                              label: email,
                             ),
                             const CustomTextField(
-                              hintText: "+234",
+                              hintText: defaultNumberFormat,
                               keyboardType: TextInputType.text,
-                              label: "Phone number",
+                              label: phoneNumber,
                             ),
                             DropDownButtonMain(
                               title: school,
-                              hintText: "Enter school",
+                              hintText: enterSchool,
                               onTap: (selectedSchool) {
                                 setState(() {
                                   school = selectedSchool;
@@ -489,11 +468,11 @@ class _JiggyWaitListScreenState extends State<JiggyWaitListScreen> {
                                   );
                                 },
                               ).toList(),
-                              label: "Institution",
+                              label: institution,
                             ),
                             DropDownButtonMain(
                               title: state,
-                              hintText: "Enter location of institution",
+                              hintText: enterLocationOfInstitution,
                               onTap: (selectedState) {
                                 setState(() {
                                   state = selectedState;
@@ -514,11 +493,11 @@ class _JiggyWaitListScreenState extends State<JiggyWaitListScreen> {
                                   );
                                 },
                               ).toList(),
-                              label: "Location of institution",
+                              label: locationOfInstitution,
                             ),
                             CustomDateButton(
                               date: date,
-                              label: "Expected graduation year",
+                              label: expectedGraduationYear,
                               onTapped: () async {
                                 selectDate(context);
                               },
@@ -535,7 +514,7 @@ class _JiggyWaitListScreenState extends State<JiggyWaitListScreen> {
                                 ),
                                 child: const Center(
                                   child: Text(
-                                    "Sign In",
+                                    signIn,
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontFamily: lato,
@@ -552,8 +531,7 @@ class _JiggyWaitListScreenState extends State<JiggyWaitListScreen> {
                                 maxWidth: 597,
                               ),
                               child: const Text(
-                                "We're really honest guys and promise not to send you ads. "
-                                "We will write only once when our platform is ready.",
+                                weAreReallyHonestAndPromiseNotToSendAdsText,
                                 style: TextStyle(
                                   fontFamily: workSans,
                                   fontSize: 20,
@@ -569,7 +547,7 @@ class _JiggyWaitListScreenState extends State<JiggyWaitListScreen> {
                         height: 60,
                       ),
                       Text(
-                        "Why it's cool?",
+                        whyItsCool,
                         style: TextStyle(
                           fontFamily: roboto,
                           color: AppColors.kWhite,
@@ -582,7 +560,12 @@ class _JiggyWaitListScreenState extends State<JiggyWaitListScreen> {
                       ),
                       ConstrainedBox(
                         constraints: BoxConstraints(
-                            maxHeight: screenWidth > 795 ? 783 : 1650, maxWidth: 783),
+                            maxHeight: screenWidth > 795
+                                ? 783
+                                : screenWidth >= 781 && screenWidth <= 795
+                                    ? 1640
+                                    : 1310,
+                            maxWidth: 783),
                         child: Column(
                           crossAxisAlignment: screenWidth > 450
                               ? CrossAxisAlignment.start
@@ -592,13 +575,110 @@ class _JiggyWaitListScreenState extends State<JiggyWaitListScreen> {
                               : reasonsWhyJiggyIsCoolOnMobile(screenWidth),
                         ),
                       ),
-                      screenWidth > 795 ? const SizedBox.shrink() : const SizedBox(height: 40),
+                      const SizedBox(height: 40),
+                      //
+                      Align(
+                        alignment: AlignmentDirectional.bottomCenter,
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 458),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                            height: 205.4,
+                            decoration: BoxDecoration(
+                              color:
+                                  screenWidth > 795 ? AppColors.kBlack200 : AppColors.kTransparent,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Center(
+                              child: Column(
+                                children: [
+                                  Text(
+                                    referAFriend,
+                                    style: TextStyle(
+                                        fontFamily: lato,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: screenWidth > 450 ? 26 : 20,
+                                        color: AppColors.kWhite),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    earnCoinsOnEachReferral,
+                                    style: TextStyle(
+                                      fontFamily: lato,
+                                      fontSize: screenWidth > 450 ? 20 : 16,
+                                      color: AppColors.kWhite,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Clipboard.setData(
+                                        const ClipboardData(text: defaultJiggyReferralLink),
+                                      );
+                                      showToast(
+                                          msg: "$copied '$defaultJiggyReferralLink' $toClipboard",
+                                          isNeutralMessage: true);
+                                    },
+                                    child: ConstrainedBox(
+                                      constraints: const BoxConstraints(maxWidth: 414),
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 10),
+                                        height: 56,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(30),
+                                          color: AppColors.kWhite,
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              defaultJiggyReferralLink,
+                                              style: TextStyle(
+                                                color: AppColors.kBlack20,
+                                                fontFamily: openSans,
+                                                fontSize: screenWidth > 450 ? 21 : 16,
+                                              ),
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {
+                                                Clipboard.setData(
+                                                  const ClipboardData(
+                                                      text: defaultJiggyReferralLink),
+                                                );
+                                                showToast(
+                                                    msg:
+                                                        "$copied '$defaultJiggyReferralLink' $toClipboard",
+                                                    isNeutralMessage: true);
+                                              },
+                                              child: Image.asset(
+                                                AppImages.copyIcon,
+                                                scale: screenWidth > 450 ? 3.0 : 4.0,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 40),
                       Align(
                         alignment: AlignmentDirectional.bottomCenter,
                         child: Column(
                           children: [
                             Text(
-                              "Your campus, Your secret, Your story.",
+                              yourCampusYourStoryYourSecret,
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: screenWidth > 450 ? 24 : 17.5,
                                 color: AppColors.kWhite,
@@ -625,7 +705,7 @@ class _JiggyWaitListScreenState extends State<JiggyWaitListScreen> {
                               height: 15,
                             ),
                             Text(
-                              "©️ All Rights Reserved. Jiggy social",
+                              allRightsReserved,
                               style: TextStyle(
                                 fontSize: screenWidth > 450 ? 20 : 14.6,
                                 color: AppColors.kWhite,
@@ -634,7 +714,7 @@ class _JiggyWaitListScreenState extends State<JiggyWaitListScreen> {
                             ),
                           ],
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
