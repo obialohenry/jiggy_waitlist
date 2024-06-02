@@ -241,7 +241,7 @@ class _JiggyWaitListScreenState extends ConsumerState<JiggyWaitListScreen> {
                         height: screenWidth > 450 ? 100.0 : 10,
                       ),
                       ConstrainedBox(
-                        constraints: const BoxConstraints(maxHeight: 630, maxWidth: 554),
+                        constraints: const BoxConstraints(maxHeight: 680, maxWidth: 554),
                         child: DummyData.referralCode == null
                             ? SignIn(
                                 screenWidth: screenWidth,
@@ -1275,6 +1275,90 @@ class AReasonWhyItsCool extends StatelessWidget {
 //   }
 // }
 
+// TextFormField(
+//             onChanged: widget.onChanged,
+//             maxLength: widget.maxlength,
+//             inputFormatters: widget.inputFormatter,
+//             controller: widget.controller,
+//             textInputAction: widget.textInputAction,
+//             focusNode: myFocusNode,
+//             style: theme.textTheme.bodyMedium!.copyWith(
+//               color: theme.colorScheme.primary,
+//               fontWeight: FontWeight.w400,
+//               fontFamily: 'TTHoves',
+//               fontSize: widget.fontSize ?? 14.spMin,
+//             ),
+//             keyboardType: widget.keyboardType,
+//             initialValue: widget.initialValue,
+//             textCapitalization: widget.textCapitalization,
+//             onTap: widget.onTap,
+//             readOnly: widget.readOnly,
+//             enabled: widget.enabled,
+//             textAlign: widget.textAlign,
+//             maxLines: widget.maxLines ?? 1,
+//             validator: widget.validator,
+//             obscureText: widget.obscureInput,
+//             decoration: InputDecoration(
+//               border: widget.readOnly ? InputBorder.none : null,
+//               hintText: widget.hint,
+//               hintStyle: theme.textTheme.bodyMedium!.copyWith(
+//                 color: widget.readOnly
+//                     ? themeMode == ThemeMode.light
+//                         ? AppColors.kBlack4
+//                         : AppColors.kWhite
+
+//                     ///Check if this is the best color for the darkmode
+//                     : theme.colorScheme.primary,
+//                 fontFamily: 'TTHoves',
+//                 fontSize: 15.spMin,
+//                 fontWeight: FontWeight.w400,
+//               ),
+//               prefixIcon: widget.prefixIcon,
+//               suffixText: widget.showSuffixText! ? widget.suffixText : '',
+//               suffixIcon: widget.textAlign == TextAlign.center
+//                   ? null
+//                   : widget.showSuffixIcon!
+//                       ? Stack(
+//                           alignment: AlignmentDirectional.center,
+//                           children: [
+//                             Visibility(
+//                               visible: widget.password!,
+//                               child: GestureDetector(
+//                                 onTap: widget.onObscureText,
+//                                 child: SizedBox(
+//                                   height: 40.h,
+//                                   width: 45.w,
+//                                   // color: Colors.red,
+//                                   child: Icon(
+//                                     widget.obscureInput
+//                                         ? Icons.visibility_outlined
+//                                         : Icons.visibility_off_outlined,
+//                                     size: 20.r,
+//                                     color: theme.colorScheme.primary,
+//                                   ),
+//                                 ),
+//                               ),
+//                             ),
+//                             Visibility(
+//                               visible: widget.trailing != null,
+//                               child: widget.trailing ?? const SizedBox(),
+//                             ),
+//                           ],
+//                         )
+//                       : null,
+//               filled: widget.isFilled,
+//               contentPadding:
+//                   const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+//               fillColor: widget.readOnly ? theme.cardColor : widget.fillColor,
+//               enabledBorder: widget.isFilled
+
+//                     )
+//                   : InputBorder.none,
+
+//           ),
+
+  
+
 class CustomTextField extends StatelessWidget {
   const CustomTextField({
     super.key,
@@ -1301,12 +1385,8 @@ class CustomTextField extends StatelessWidget {
         const SizedBox(
           height: 10.0,
         ),
-        Container(
+        SizedBox(
           width: 315,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(46),
-            border: Border.all(color: AppColors.kWhite),
-          ),
           child: TextFormField(
             controller: controller,
             validator: validator,
@@ -1317,6 +1397,27 @@ class CustomTextField extends StatelessWidget {
               color: AppColors.kWhite,
             ),
             decoration: InputDecoration(
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(46),
+                borderSide: const BorderSide(color: AppColors.kRed),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(46),
+                borderSide: const BorderSide(color: AppColors.kRed),
+              ),
+              errorStyle: const TextStyle(color: AppColors.kRed),
+              errorMaxLines: 4,
+
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(46),
+                borderSide: const BorderSide(color: AppColors.kWhite, width: 1),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(46),
+                borderSide: const BorderSide(
+                  color: AppColors.kWhite,
+                ),
+              ),
               border: InputBorder.none,
               contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
               // prefixIcon: Image.asset(

@@ -16,4 +16,5 @@ class AppColors {
   static const kRedTrans = Color(0xff7B1047);
   static const kBlack200 = Color(0xff1E1E1E);
   static const kBlack20 = Color(0xff8E8E93);
+  static const kRed = Colors.red;
 }
