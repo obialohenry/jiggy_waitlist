@@ -2,10 +2,13 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jiggy_waitlist/model/local/dummy_data.dart';
+import 'package:jiggy_waitlist/model/response/south_east_university_response.dart';
 import 'package:jiggy_waitlist/src/config.dart';
 import 'package:jiggy_waitlist/src/components.dart';
 import 'package:jiggy_waitlist/src/utils.dart';
 import 'package:intl/intl.dart';
+import 'package:jiggy_waitlist/view_model/jiggy%20_waitlist_view_model.dart';
 
 void main() {
   runApp(
@@ -29,29 +32,15 @@ class JiggyWaitlistApp extends StatelessWidget {
   }
 }
 
-class JiggyWaitListScreen extends StatefulWidget {
+class JiggyWaitListScreen extends ConsumerStatefulWidget {
   const JiggyWaitListScreen({super.key});
 
   @override
-  State<JiggyWaitListScreen> createState() => _JiggyWaitListScreenState();
+  ConsumerState<JiggyWaitListScreen> createState() => _JiggyWaitListScreenState();
 }
 
-class _JiggyWaitListScreenState extends State<JiggyWaitListScreen> {
-  List<String> schools = [
-    futo,
-    futa,
-    uniport,
-    rsust,
-    absu,
-  ];
-  List<String> states = [
-    imoState,
-    lagosState,
-    riversState,
-    abujaState,
-    akwaIbomState,
-  ];
-
+class _JiggyWaitListScreenState extends ConsumerState<JiggyWaitListScreen> {
+  final _signInFormKey = GlobalKey<FormState>();
   List<String> socialMediaIcons = [
     AppImages.linkedinIcon,
     AppImages.instagramIcon,
@@ -63,27 +52,25 @@ class _JiggyWaitListScreenState extends State<JiggyWaitListScreen> {
   ];
   String date = defaultDate;
 
-  Future<void> selectDate(BuildContext context) {
-    return showDatePicker(
-      context: context,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(3000),
-      currentDate: DateTime.now(),
-      fieldLabelText: date,
-    ).then((dateSelected) {
-      setState(() {
-        if (dateSelected == null) {
-          date;
-        } else {
-          date = UtilFunctions.formatDate(dateSelected.toString());
-          date = DateFormat("yyyy-MM-dd").format(DateFormat("d MMM yyyy").parse(date));
-        }
-      });
-    });
-  }
+  // Future<void> selectDate(BuildContext context) {
+  //   return showDatePicker(
+  //     context: context,
+  //     firstDate: DateTime(2000),
+  //     lastDate: DateTime(3000),
+  //     currentDate: DateTime.now(),
+  //     fieldLabelText: date,
+  //   ).then((dateSelected) {
+  //     setState(() {
+  //       if (dateSelected == null) {
+  //         date;
+  //       } else {
+  //         date = UtilFunctions.formatDate(dateSelected.toString());
+  //         date = DateFormat("yyyy-MM-dd").format(DateFormat("d MMM yyyy").parse(date));
+  //       }
+  //     });
+  //   });
+  // }
 
-  String? state;
-  String? school;
   List<Widget> reasonsWhyJiggyIsCoolOnMobile(double screenWidth) {
     return [
       AReasonWhyItsCool(
@@ -199,7 +186,17 @@ class _JiggyWaitListScreenState extends State<JiggyWaitListScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    var jiggyWaitlistProvider = ref.watch(jiggyWaitlistViewModel);
+    jiggyWaitlistProvider.getAllUniversitiesInTheSouthEast(context);
+  }
+
+  Validator validator = Validator();
+  @override
   Widget build(BuildContext context) {
+    var jiggyWaitlistProvider = ref.watch(jiggyWaitlistViewModel);
     return Scaffold(
       body: LayoutBuilder(builder: (context, constraints) {
         print("screen width: ${constraints.maxWidth}");
@@ -214,10 +211,10 @@ class _JiggyWaitListScreenState extends State<JiggyWaitListScreen> {
               ),
             ),
           ),
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 790),
-              child: SingleChildScrollView(
+          child: SingleChildScrollView(
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 790),
                 child: Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: screenWidth > 820
@@ -227,323 +224,37 @@ class _JiggyWaitListScreenState extends State<JiggyWaitListScreen> {
                             : 12,
                   ),
                   child: Column(
-                    crossAxisAlignment:
-                        CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const GradienText(
-                            gradient: AppColors.kGradientTextColor,
-                            style: TextStyle(fontFamily: pacifico, fontSize: 24),
-                            text: jiggy,
-                          ),
-                          SizedBox(
-                            width: 227,
-                            child: Row(
-                              children: [
-                                GestureDetector(
-                                  onTap: () {},
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.kTransparent,
-                                      borderRadius: BorderRadius.circular(16),
-                                      border: Border.all(
-                                        color: AppColors.kWhite,
-                                      ),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        const Image(
-                                          image: AssetImage(AppImages.aboutIcon),
-                                          width: 20,
-                                          height: 20,
-                                        ),
-                                        if (screenWidth > 450)
-                                          const Row(
-                                            children: [
-                                              SizedBox(
-                                                width: 15,
-                                              ),
-                                              Text(
-                                                about,
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: AppColors.kWhite,
-                                                  fontFamily: workSans,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 15),
-                                GestureDetector(
-                                  onTap: () {},
-                                  child: Container(
-                                    padding:
-                                        const EdgeInsets.only(top: 6, left: 6, bottom: 6, right: 8),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.kWhite,
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Image.asset(
-                                          AppImages.emoji,
-                                          width: 20,
-                                          height: 20,
-                                        ),
-                                        const SizedBox(
-                                          width: 15,
-                                        ),
-                                        const Text(
-                                          joinBeta,
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: AppColors.kBlack,
-                                            fontFamily: workSans,
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
+                      //
+                      Header(screenWidth: screenWidth),
                       const SizedBox(
                         height: 60,
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    join,
-                                    style: TextStyle(
-                                      color: AppColors.kWhite,
-                                      fontSize: screenWidth > 450 ? 56 : 27.5,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: openSans,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  GradienText(
-                                    gradient: AppColors.kGradientTextColor,
-                                    style: TextStyle(
-                                      fontSize: screenWidth > 450 ? 58 : 27.5,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: openSans,
-                                    ),
-                                    text: jiggy,
-                                  ),
-                                  const SizedBox(
-                                    width: 12,
-                                  ),
-                                  Text(
-                                    waitlist,
-                                    style: TextStyle(
-                                      color: AppColors.kWhite,
-                                      fontSize: screenWidth > 450 ? 56 : 27.5,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: openSans,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Text(
-                                yourCampusYourStoryYourSecret,
-                                style: TextStyle(
-                                  color: AppColors.kWhite,
-                                  fontSize: screenWidth > 450 ? 36 : 17.6,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: openSans,
-                                ),
-                              )
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 25,
-                          ),
-                          ConstrainedBox(
-                            constraints: const BoxConstraints(maxWidth: 609),
-                            child: Text(
-                              unlockTheUltimateCampusExperienceWithJiggy,
-                              style: TextStyle(
-                                fontSize: screenWidth > 450 ? 20 : 15,
-                                fontFamily: screenWidth > 450 ? workSans : lato,
-                                color: AppColors.kWhite,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
+                      //An introductory text, telling what
+                      JoinJiggyWaitlist(screenWidth: screenWidth),
                       SizedBox(
                         height: screenWidth > 450 ? 40 : 85,
                       ),
-                      Column(
-                        crossAxisAlignment: screenWidth > 450
-                            ? CrossAxisAlignment.start
-                            : CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            screenWidth > 450 ? "                    $earlyAccess" : earlyAccess,
-                            style: const TextStyle(
-                              color: AppColors.kWhite,
-                              fontSize: 32,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: roboto,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 12,
-                          ),
-                          ConstrainedBox(
-                            constraints: const BoxConstraints(maxWidth: 521),
-                            child: const Text(
-                              softWrap: true,
-                              textAlign: TextAlign.center,
-                              byJoiningTheWaitlistTextAndOffers,
-                              style: TextStyle(
-                                color: AppColors.kWhite,
-                                fontSize: 16,
-                                fontFamily: lato,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                      EarlyAccess(screenWidth: screenWidth),
                       SizedBox(
                         height: screenWidth > 450 ? 100.0 : 10,
                       ),
                       ConstrainedBox(
-                        constraints: const BoxConstraints(maxHeight: 630),
-                        child: Column(
-                          crossAxisAlignment: screenWidth > 450
-                              ? CrossAxisAlignment.start
-                              : CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const CustomTextField(
-                              hintText: email,
-                              keyboardType: TextInputType.text,
-                              label: email,
-                            ),
-                            const CustomTextField(
-                              hintText: defaultNumberFormat,
-                              keyboardType: TextInputType.text,
-                              label: phoneNumber,
-                            ),
-                            DropDownButtonMain(
-                              title: school,
-                              hintText: enterSchool,
-                              onTap: (selectedSchool) {
-                                setState(() {
-                                  school = selectedSchool;
-                                });
-                              },
-                              items: schools.map(
-                                (aSchoolInListOfSchoolsNamedSchools) {
-                                  return DropdownMenuItem<String>(
-                                    value: aSchoolInListOfSchoolsNamedSchools,
-                                    child: Text(
-                                      aSchoolInListOfSchoolsNamedSchools,
-                                      style: const TextStyle(
-                                        fontFamily: lato,
-                                        fontSize: 11.2,
-                                        color: AppColors.kWhite,
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ).toList(),
-                              label: institution,
-                            ),
-                            DropDownButtonMain(
-                              title: state,
-                              hintText: enterLocationOfInstitution,
-                              onTap: (selectedState) {
-                                setState(() {
-                                  state = selectedState;
-                                });
-                              },
-                              items: states.map(
-                                (aStateInListOfStatesNamedStates) {
-                                  return DropdownMenuItem<String>(
-                                    value: aStateInListOfStatesNamedStates,
-                                    child: Text(
-                                      aStateInListOfStatesNamedStates,
-                                      style: const TextStyle(
-                                        fontFamily: lato,
-                                        fontSize: 11.2,
-                                        color: AppColors.kWhite,
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ).toList(),
-                              label: locationOfInstitution,
-                            ),
-                            CustomDateButton(
-                              date: date,
-                              label: expectedGraduationYear,
-                              onTapped: () async {
-                                selectDate(context);
-                              },
-                            ),
-                            GestureDetector(
-                              onTap: () {},
-                              child: Container(
-                                width: 315,
-                                padding: const EdgeInsets.symmetric(vertical: 11, horizontal: 15),
-                                decoration: BoxDecoration(
-                                  color: AppColors.kPink,
-                                  borderRadius: BorderRadius.circular(46),
-                                  border: Border.all(color: AppColors.kWhite),
-                                ),
-                                child: const Center(
-                                  child: Text(
-                                    signIn,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontFamily: lato,
-                                      color: AppColors.kWhite,
-                                      fontStyle: FontStyle.normal,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            ConstrainedBox(
-                              constraints: const BoxConstraints(
-                                maxHeight: 84,
-                                maxWidth: 597,
-                              ),
-                              child: const Text(
-                                weAreReallyHonestAndPromiseNotToSendAdsText,
-                                style: TextStyle(
-                                  fontFamily: workSans,
-                                  fontSize: 20,
-                                  color: AppColors.kWhite,
-                                ),
-                                softWrap: true,
-                              ),
-                            ),
-                          ],
-                        ),
+                        constraints: const BoxConstraints(maxHeight: 630, maxWidth: 554),
+                        child: DummyData.referralCode == null
+                            ? SignIn(
+                                screenWidth: screenWidth,
+                                signInFormKey: _signInFormKey,
+                                validator: validator,
+                                jiggyWaitlistProvider: jiggyWaitlistProvider,
+                              )
+                            : DummyData.referralCode != null &&
+                                    jiggyWaitlistProvider.isUserNotLoggedIn
+                                ? LogIn(
+                                    screenWidth: screenWidth,
+                                    jiggyWaitlistProvider: jiggyWaitlistProvider)
+                                : YourWaitlistEarnings(screenWidth: screenWidth),
                       ),
                       const SizedBox(
                         height: 60,
@@ -577,145 +288,27 @@ class _JiggyWaitListScreenState extends State<JiggyWaitListScreen> {
                               : reasonsWhyJiggyIsCoolOnMobile(screenWidth),
                         ),
                       ),
-                      const SizedBox(height: 40),
-                      //
-                      Align(
-                        alignment: AlignmentDirectional.bottomCenter,
-                        child: ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 458),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                            height: 205.4,
-                            decoration: BoxDecoration(
-                              color:
-                                  screenWidth > 795 ? AppColors.kBlack200 : AppColors.kTransparent,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Center(
-                              child: Column(
-                                children: [
-                                  Text(
-                                    referAFriend,
-                                    style: TextStyle(
-                                        fontFamily: lato,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: screenWidth > 450 ? 26 : 20,
-                                        color: AppColors.kWhite),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text(
-                                    earnCoinsOnEachReferral,
-                                    style: TextStyle(
-                                      fontFamily: lato,
-                                      fontSize: screenWidth > 450 ? 20 : 16,
-                                      color: AppColors.kWhite,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Clipboard.setData(
-                                        const ClipboardData(text: defaultJiggyReferralLink),
-                                      );
-                                      showToast(
-                                          msg: "$copied '$defaultJiggyReferralLink' $toClipboard",
-                                          isNeutralMessage: true);
-                                    },
-                                    child: ConstrainedBox(
-                                      constraints: const BoxConstraints(maxWidth: 414),
-                                      child: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 10, vertical: 10),
-                                        height: 56,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(30),
-                                          color: AppColors.kWhite,
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              defaultJiggyReferralLink,
-                                              style: TextStyle(
-                                                color: AppColors.kBlack20,
-                                                fontFamily: openSans,
-                                                fontSize: screenWidth > 450 ? 21 : 16,
-                                              ),
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                Clipboard.setData(
-                                                  const ClipboardData(
-                                                      text: defaultJiggyReferralLink),
-                                                );
-                                                showToast(
-                                                    msg:
-                                                        "$copied '$defaultJiggyReferralLink' $toClipboard",
-                                                    isNeutralMessage: true);
-                                              },
-                                              child: Image.asset(
-                                                AppImages.copyIcon,
-                                                scale: screenWidth > 450 ? 3.0 : 4.0,
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
+                      const SizedBox(height: 20),
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(maxHeight: 483),
+                        child: Text(
+                          softWrap: true,
+                          textAlign: TextAlign.center,
+                          dontSettleForLess,
+                          style: TextStyle(
+                            fontFamily: lato,
+                            fontSize: screenWidth > 450 ? 21 : 14,
+                            color: AppColors.kWhite,
                           ),
                         ),
                       ),
                       const SizedBox(height: 40),
-                      Align(
-                        alignment: AlignmentDirectional.bottomCenter,
-                        child: Column(
-                          children: [
-                            Text(
-                              yourCampusYourStoryYourSecret,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: screenWidth > 450 ? 24 : 17.5,
-                                color: AppColors.kWhite,
-                                fontFamily: workSans,
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            SizedBox(
-                              width: screenWidth > 450 ? 288 : 210,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children:
-                                    socialMediaIcons.map((aSocialMediaIconInSocialMediaIconsList) {
-                                  return Image.asset(
-                                    aSocialMediaIconInSocialMediaIconsList,
-                                    scale: screenWidth > 450 ? 3.0 : 4.0,
-                                  );
-                                }).toList(),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            Text(
-                              allRightsReserved,
-                              style: TextStyle(
-                                fontSize: screenWidth > 450 ? 20 : 14.6,
-                                color: AppColors.kWhite,
-                                fontFamily: workSans,
-                              ),
-                            ),
-                          ],
-                        ),
+                      //
+                      ReferAFriend(screenWidth: screenWidth),
+                      const SizedBox(height: 40),
+                      Footer(
+                        screenWidth: screenWidth,
+                        socialMediaIcons: socialMediaIcons,
                       ),
                     ],
                   ),
@@ -725,6 +318,835 @@ class _JiggyWaitListScreenState extends State<JiggyWaitListScreen> {
           ),
         );
       }),
+    );
+  }
+}
+
+class YourWaitlistEarnings extends StatelessWidget {
+  const YourWaitlistEarnings({
+    super.key,
+    required this.screenWidth,
+  });
+
+  final double screenWidth;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          "Your waitlist earnings",
+          style: TextStyle(
+            fontSize: screenWidth > 450 ? 48 : 32,
+            fontFamily: lato,
+            fontWeight: FontWeight.bold,
+            color: AppColors.kWhite,
+          ),
+        ),
+        const SizedBox(height: 15),
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 450),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              //Number of referalls.
+              Column(
+                children: [
+                  Text(
+                    "No of referalls:",
+                    style: TextStyle(
+                      fontSize: screenWidth > 450 ? 17 : 12,
+                      fontFamily: lato,
+                      color: AppColors.kWhite,
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  //TODO: ask for the api that gets a users total referall.//@Obialor
+                  Text(
+                    "20",
+                    style: TextStyle(
+                      fontSize: screenWidth > 450 ? 48 : 32,
+                      fontFamily: lato,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.kWhite,
+                    ),
+                  ),
+                ],
+              ),
+              //Number of coins
+              Column(
+                children: [
+                  Text(
+                    "No of coins:",
+                    style: TextStyle(
+                      fontSize: screenWidth > 450 ? 17 : 12,
+                      fontFamily: lato,
+                      color: AppColors.kWhite,
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  Row(
+                    children: [
+                      //TODO: get a user's jiggy coin from the login API. //@Obialor
+                      Text(
+                        "200Jigs",
+                        style: TextStyle(
+                          fontSize: screenWidth > 450 ? 48 : 32,
+                          fontFamily: pacifico,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.kWhite,
+                        ),
+                      ),
+                      Image.asset(
+                        AppImages.jiggyCoinLogo,
+                        scale: screenWidth > 450 ? 2 : 3,
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 15),
+        Text(
+          "Earnings can be used in the app after launch to purchase "
+          "data in-app items etc",
+          style: TextStyle(
+            fontSize: screenWidth > 450 ? 20 : 13,
+            fontFamily: lato,
+            color: AppColors.kWhite,
+          ),
+        ),
+        const SizedBox(height: 20),
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 458),
+          child: Column(
+            children: [
+              Text(
+                referAFriend,
+                style: TextStyle(
+                    fontFamily: lato,
+                    fontWeight: FontWeight.bold,
+                    fontSize: screenWidth > 450 ? 26 : 20,
+                    color: AppColors.kWhite),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                earnCoinsOnEachReferral,
+                style: TextStyle(
+                  fontFamily: lato,
+                  fontSize: screenWidth > 450 ? 20 : 16,
+                  color: AppColors.kWhite,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              GestureDetector(
+                onTap: () {
+                  Clipboard.setData(
+                    const ClipboardData(text: defaultJiggyReferralLink),
+                  );
+                  showToast(
+                      msg: "$copied '$defaultJiggyReferralLink' $toClipboard",
+                      isNeutralMessage: true);
+                },
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 414),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    height: 56,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      color: AppColors.kWhite,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          defaultJiggyReferralLink,
+                          style: TextStyle(
+                            color: AppColors.kBlack20,
+                            fontFamily: openSans,
+                            fontSize: screenWidth > 450 ? 21 : 16,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Clipboard.setData(
+                              const ClipboardData(text: defaultJiggyReferralLink),
+                            );
+                            showToast(
+                                msg: "$copied '$defaultJiggyReferralLink' $toClipboard",
+                                isNeutralMessage: true);
+                          },
+                          child: Image.asset(
+                            AppImages.copyIcon,
+                            scale: screenWidth > 450 ? 3.0 : 4.0,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class LogIn extends StatelessWidget {
+  const LogIn({
+    super.key,
+    required this.screenWidth,
+    required this.jiggyWaitlistProvider,
+  });
+
+  final double screenWidth;
+  final JiggyWaitlistViewModel jiggyWaitlistProvider;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Yay, you are on the waitlist.😉",
+          style: TextStyle(
+            fontSize: screenWidth > 450 ? 48 : 32,
+            fontFamily: lato,
+            fontWeight: FontWeight.bold,
+            color: AppColors.kWhite,
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        GestureDetector(
+          onTap: () {},
+          child: Text(
+            "click to join our community for update and giveaway",
+            style: TextStyle(
+              fontSize: screenWidth > 450 ? 24 : 16,
+              fontFamily: lato,
+              color: AppColors.kWhite,
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        Text(
+          email,
+          style: TextStyle(
+            fontSize: screenWidth > 450 ? 30 : 20,
+            fontFamily: openSans,
+            color: AppColors.kWhite,
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Text(
+          "Login to see earnings",
+          style: TextStyle(
+            fontSize: screenWidth > 450 ? 24 : 16,
+            fontFamily: lato,
+            color: AppColors.kWhite,
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        CustomTextField(
+          hintText: DummyData.email,
+          keyboardType: TextInputType.text,
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Align(
+          alignment: AlignmentDirectional.center,
+          child: GestureDetector(
+            onTap: () {},
+            child: Container(
+              width: 315,
+              padding: const EdgeInsets.symmetric(vertical: 11, horizontal: 15),
+              decoration: BoxDecoration(
+                color: AppColors.kPink,
+                borderRadius: BorderRadius.circular(46),
+                border: Border.all(color: AppColors.kWhite),
+              ),
+              child: Center(
+                child: jiggyWaitlistProvider.isLoggingIn
+                    ? const SizedBox(
+                        width: 10,
+                        height: 10,
+                        child: CircularProgressIndicator(
+                          color: AppColors.kWhite,
+                        ),
+                      )
+                    : const Text(
+                        "login",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: lato,
+                          color: AppColors.kWhite,
+                          fontStyle: FontStyle.normal,
+                        ),
+                      ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class Footer extends StatelessWidget {
+  const Footer({
+    super.key,
+    required this.screenWidth,
+    required this.socialMediaIcons,
+  });
+
+  final double screenWidth;
+  final List<String> socialMediaIcons;
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: AlignmentDirectional.bottomCenter,
+      child: Column(
+        children: [
+          Text(
+            yourCampusYourStoryYourSecret,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: screenWidth > 450 ? 24 : 17.5,
+              color: AppColors.kWhite,
+              fontFamily: workSans,
+            ),
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          SizedBox(
+            width: screenWidth > 450 ? 288 : 210,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: socialMediaIcons.map((aSocialMediaIconInSocialMediaIconsList) {
+                return Image.asset(
+                  aSocialMediaIconInSocialMediaIconsList,
+                  scale: screenWidth > 450 ? 3.0 : 4.0,
+                );
+              }).toList(),
+            ),
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          Text(
+            allRightsReserved,
+            style: TextStyle(
+              fontSize: screenWidth > 450 ? 20 : 14.6,
+              color: AppColors.kWhite,
+              fontFamily: workSans,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ReferAFriend extends StatelessWidget {
+  const ReferAFriend({
+    super.key,
+    required this.screenWidth,
+  });
+
+  final double screenWidth;
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: AlignmentDirectional.bottomCenter,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 458),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          height: 205.4,
+          decoration: BoxDecoration(
+            color: screenWidth > 795 ? AppColors.kBlack200 : AppColors.kTransparent,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Center(
+            child: Column(
+              children: [
+                Text(
+                  referAFriend,
+                  style: TextStyle(
+                      fontFamily: lato,
+                      fontWeight: FontWeight.bold,
+                      fontSize: screenWidth > 450 ? 26 : 20,
+                      color: AppColors.kWhite),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  earnCoinsOnEachReferral,
+                  style: TextStyle(
+                    fontFamily: lato,
+                    fontSize: screenWidth > 450 ? 20 : 16,
+                    color: AppColors.kWhite,
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Clipboard.setData(
+                      const ClipboardData(text: defaultJiggyReferralLink),
+                    );
+                    showToast(
+                        msg: "$copied '$defaultJiggyReferralLink' $toClipboard",
+                        isNeutralMessage: true);
+                  },
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 414),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      height: 56,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        color: AppColors.kWhite,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            defaultJiggyReferralLink,
+                            style: TextStyle(
+                              color: AppColors.kBlack20,
+                              fontFamily: openSans,
+                              fontSize: screenWidth > 450 ? 21 : 16,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Clipboard.setData(
+                                const ClipboardData(text: defaultJiggyReferralLink),
+                              );
+                              showToast(
+                                  msg: "$copied '$defaultJiggyReferralLink' $toClipboard",
+                                  isNeutralMessage: true);
+                            },
+                            child: Image.asset(
+                              AppImages.copyIcon,
+                              scale: screenWidth > 450 ? 3.0 : 4.0,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SignIn extends StatelessWidget {
+  const SignIn({
+    super.key,
+    required this.screenWidth,
+    required GlobalKey<FormState> signInFormKey,
+    required this.validator,
+    required this.jiggyWaitlistProvider,
+  }) : _signInFormKey = signInFormKey;
+
+  final double screenWidth;
+  final GlobalKey<FormState> _signInFormKey;
+  final Validator validator;
+  final JiggyWaitlistViewModel jiggyWaitlistProvider;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: screenWidth > 450 ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+      children: [
+        Form(
+          key: _signInFormKey,
+          child: Column(
+            crossAxisAlignment:
+                screenWidth > 450 ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+            children: [
+              CustomTextField(
+                hintText: email,
+                keyboardType: TextInputType.text,
+                label: email,
+                validator: (email) => validator.validateEmail(email),
+                controller: jiggyWaitlistProvider.emailController,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              CustomTextField(
+                hintText: defaultNumberFormat,
+                keyboardType: TextInputType.number,
+                label: phoneNumber,
+                validator: (phoneNumber) => validator.validatePhoneNumber(phoneNumber),
+                controller: jiggyWaitlistProvider.phoneNumberController,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              //A Dropdown for all southeast universities.
+              DropDownButtonMain(
+                title: jiggyWaitlistProvider.school,
+                hintText: enterSchool,
+                onTap: (selectedUniversity) {
+                  jiggyWaitlistProvider.selectASouthEastUniversity(selectedUniversity);
+                },
+                items: jiggyWaitlistProvider.southEastUniversitiesList?.map(
+                  (aUniversityInTheSouthEast) {
+                    return DropdownMenuItem<String>(
+                      value: aUniversityInTheSouthEast.name,
+                      child: Text(
+                        aUniversityInTheSouthEast.name!,
+                        style: const TextStyle(
+                          fontFamily: lato,
+                          fontSize: 11.2,
+                          color: AppColors.kWhite,
+                        ),
+                      ),
+                    );
+                  },
+                ).toList(),
+                label: institution,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              CustomTextField(
+                hintText: defaultDate,
+                keyboardType: TextInputType.number,
+                label: expectedGraduationYear,
+                validator: (graduationYear) => validator.validateEmptyTextField(graduationYear),
+                controller: jiggyWaitlistProvider.expectedYearOfGraduationController,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              CustomTextField(
+                hintText: code,
+                keyboardType: TextInputType.text,
+                label: referral,
+                controller: jiggyWaitlistProvider.referralController,
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        //
+        GestureDetector(
+          onTap: () {
+            if (_signInFormKey.currentState!.validate()) {
+              _signInFormKey.currentState!.save();
+              jiggyWaitlistProvider.getUniversityId();
+              jiggyWaitlistProvider.aWaitlistForm(context);
+            }
+          },
+          child: Container(
+            width: 315,
+            padding: const EdgeInsets.symmetric(vertical: 11, horizontal: 15),
+            decoration: BoxDecoration(
+              color: AppColors.kPink,
+              borderRadius: BorderRadius.circular(46),
+              border: Border.all(color: AppColors.kWhite),
+            ),
+            child: Center(
+              child: jiggyWaitlistProvider.isPostingWaitlistForm
+                  ? const SizedBox(
+                      width: 10,
+                      height: 10,
+                      child: CircularProgressIndicator(
+                        color: AppColors.kWhite,
+                      ),
+                    )
+                  : const Text(
+                      signIn,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontFamily: lato,
+                        color: AppColors.kWhite,
+                        fontStyle: FontStyle.normal,
+                      ),
+                    ),
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        ConstrainedBox(
+          constraints: const BoxConstraints(
+            maxHeight: 84,
+            maxWidth: 597,
+          ),
+          child: const Text(
+            weAreReallyHonestAndPromiseNotToSendAdsText,
+            style: TextStyle(
+              fontFamily: workSans,
+              fontSize: 20,
+              color: AppColors.kWhite,
+            ),
+            softWrap: true,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class EarlyAccess extends StatelessWidget {
+  const EarlyAccess({
+    super.key,
+    required this.screenWidth,
+  });
+
+  final double screenWidth;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: screenWidth > 450 ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+      children: [
+        Text(
+          screenWidth > 450 ? "                    $earlyAccess" : earlyAccess,
+          style: const TextStyle(
+            color: AppColors.kWhite,
+            fontSize: 32,
+            fontWeight: FontWeight.bold,
+            fontFamily: roboto,
+          ),
+        ),
+        const SizedBox(
+          height: 12,
+        ),
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 521),
+          child: const Text(
+            softWrap: true,
+            textAlign: TextAlign.center,
+            byJoiningTheWaitlistTextAndOffers,
+            style: TextStyle(
+              color: AppColors.kWhite,
+              fontSize: 16,
+              fontFamily: lato,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class JoinJiggyWaitlist extends StatelessWidget {
+  const JoinJiggyWaitlist({
+    super.key,
+    required this.screenWidth,
+  });
+
+  final double screenWidth;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  join,
+                  style: TextStyle(
+                    color: AppColors.kWhite,
+                    fontSize: screenWidth > 450 ? 56 : 27.5,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: openSans,
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                GradienText(
+                  gradient: AppColors.kGradientTextColor,
+                  style: TextStyle(
+                    fontSize: screenWidth > 450 ? 58 : 27.5,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: openSans,
+                  ),
+                  text: jiggy,
+                ),
+                const SizedBox(
+                  width: 12,
+                ),
+                Text(
+                  waitlist,
+                  style: TextStyle(
+                    color: AppColors.kWhite,
+                    fontSize: screenWidth > 450 ? 56 : 27.5,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: openSans,
+                  ),
+                ),
+              ],
+            ),
+            Text(
+              yourCampusYourStoryYourSecret,
+              style: TextStyle(
+                color: AppColors.kWhite,
+                fontSize: screenWidth > 450 ? 36 : 17.6,
+                fontWeight: FontWeight.bold,
+                fontFamily: openSans,
+              ),
+            )
+          ],
+        ),
+        const SizedBox(
+          height: 25,
+        ),
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 609),
+          child: Text(
+            unlockTheUltimateCampusExperienceWithJiggy,
+            style: TextStyle(
+              fontSize: screenWidth > 450 ? 20 : 15,
+              fontFamily: screenWidth > 450 ? workSans : lato,
+              color: AppColors.kWhite,
+            ),
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class Header extends StatelessWidget {
+  const Header({
+    super.key,
+    required this.screenWidth,
+  });
+
+  final double screenWidth;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        const GradienText(
+          gradient: AppColors.kGradientTextColor,
+          style: TextStyle(fontFamily: pacifico, fontSize: 24),
+          text: jiggy,
+        ),
+        SizedBox(
+          width: 227,
+          child: Row(
+            children: [
+              GestureDetector(
+                onTap: () {},
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
+                  decoration: BoxDecoration(
+                    color: AppColors.kTransparent,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: AppColors.kWhite,
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      const Image(
+                        image: AssetImage(AppImages.aboutIcon),
+                        width: 20,
+                        height: 20,
+                      ),
+                      if (screenWidth > 450)
+                        const Row(
+                          children: [
+                            SizedBox(
+                              width: 15,
+                            ),
+                            Text(
+                              about,
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: AppColors.kWhite,
+                                fontFamily: workSans,
+                              ),
+                            ),
+                          ],
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(width: 15),
+              GestureDetector(
+                onTap: () {},
+                child: Container(
+                  padding: const EdgeInsets.only(top: 6, left: 6, bottom: 6, right: 8),
+                  decoration: BoxDecoration(
+                    color: AppColors.kWhite,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        AppImages.emoji,
+                        width: 20,
+                        height: 20,
+                      ),
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      const Text(
+                        joinBeta,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: AppColors.kBlack,
+                          fontFamily: workSans,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        )
+      ],
     );
   }
 }
@@ -807,73 +1229,77 @@ class AReasonWhyItsCool extends StatelessWidget {
   }
 }
 
-class CustomDateButton extends StatelessWidget {
-  const CustomDateButton({
-    super.key,
-    required this.date,
-    required this.label,
-    required this.onTapped,
-  });
-  final String label;
-  final String date;
-  final VoidCallback onTapped;
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTapped,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: const TextStyle(fontSize: 13.5, color: AppColors.kWhite, fontFamily: lato),
-          ),
-          const SizedBox(
-            height: 15.0,
-          ),
-          Container(
-            width: 315,
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 15),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(46),
-              border: Border.all(color: AppColors.kWhite),
-            ),
-            child: Text(
-              date,
-              style: const TextStyle(
-                fontSize: 11.2,
-                fontFamily: lato,
-                color: AppColors.kWhite,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+// class CustomDateButton extends StatelessWidget {
+//   const CustomDateButton({
+//     super.key,
+//     required this.date,
+//     required this.label,
+//     required this.onTapped,
+//   });
+//   final String label;
+//   final String date;
+//   final VoidCallback onTapped;
+//   @override
+//   Widget build(BuildContext context) {
+//     return GestureDetector(
+//       onTap: onTapped,
+//       child: Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           Text(
+//             label,
+//             style: const TextStyle(fontSize: 13.5, color: AppColors.kWhite, fontFamily: lato),
+//           ),
+//           const SizedBox(
+//             height: 15.0,
+//           ),
+//           Container(
+//             width: 315,
+//             padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 15),
+//             decoration: BoxDecoration(
+//               borderRadius: BorderRadius.circular(46),
+//               border: Border.all(color: AppColors.kWhite),
+//             ),
+//             child: Text(
+//               date,
+//               style: const TextStyle(
+//                 fontSize: 11.2,
+//                 fontFamily: lato,
+//                 color: AppColors.kWhite,
+//               ),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 class CustomTextField extends StatelessWidget {
   const CustomTextField({
     super.key,
     required this.hintText,
     required this.keyboardType,
-    required this.label,
+    this.label,
+    this.validator,
+    this.controller,
   });
-  final String label;
+  final String? label;
   final String? hintText;
   final TextInputType? keyboardType;
+  final FormFieldValidator<String>? validator;
+  final TextEditingController? controller;
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          label,
+          label ?? "",
           style: const TextStyle(fontSize: 13.5, color: AppColors.kWhite, fontFamily: lato),
         ),
         const SizedBox(
-          height: 15.0,
+          height: 10.0,
         ),
         Container(
           width: 315,
@@ -882,6 +1308,8 @@ class CustomTextField extends StatelessWidget {
             border: Border.all(color: AppColors.kWhite),
           ),
           child: TextFormField(
+            controller: controller,
+            validator: validator,
             keyboardType: keyboardType,
             style: const TextStyle(
               fontFamily: lato,

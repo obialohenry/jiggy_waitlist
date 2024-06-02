@@ -14,4 +14,5 @@ class AppImages {
   static const twitterIcon = "${_base_url}twitter_icon.png";
   static const dropdownIcon = "${_base_url}drop_down.png";
   static const copyIcon = "${_base_url}copy_link_icon.png";
+  static const jiggyCoinLogo = "${_base_url}jiggy_coin_logo.png";
 }

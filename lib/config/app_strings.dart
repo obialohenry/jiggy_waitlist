@@ -41,6 +41,11 @@ const didSomeoneSayPrizesSubText =
     "Get ready to flex those brain muscles and show off your campus knowledge!\n"
     "Participate in jiggy quizzes, challenges, and scavenger hunts for a chance to win "
     "epic prizes and bragging rights among your peers.";
+const dontSettleForLess = "So, why settle for boring when you can level up your "
+    "campus experience with jiggy? Join the revolution, join the waitlist, "
+    "and let the good time roll!";
+const code = "Code";
+const referral = "Referral";
 const algorithmBased = "Algorithm based";
 const gamePlayBasedEngine = "gameplay-based engine";
 const anonymity = "Anonymity";
@@ -77,8 +82,8 @@ const byJoiningTheWaitlistTextAndOffers =
 const email = "Email";
 const defaultNumberFormat = "+234";
 const phoneNumber = "Phone number";
-const enterSchool = "Enter school";
-const institution = "Institution";
+const enterSchool = "Enter your university/college";
+const institution = "University/College";
 const enterLocationOfInstitution = "Enter location of institution";
 const locationOfInstitution = "Location of institution";
 const expectedGraduationYear = "Expected graduation year";

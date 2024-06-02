@@ -101,7 +101,7 @@ class ApiService extends ApiConstants with RetryFunc {
       //   isError: true,
       // );
       throw InternetException(e.toString());
-    } on DioException catch (error) {
+    } on DioException catch (error, s) {
       logger.e(error.response!.statusCode);
       logger.e(error.response!.data.toString() + error.requestOptions.path.toString());
       var decodedRes = jsonDecode(error.response!.data);
