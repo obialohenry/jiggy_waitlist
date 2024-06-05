@@ -250,7 +250,7 @@ class _JiggyWaitListScreenState extends ConsumerState<JiggyWaitListScreen> {
                                 jiggyWaitlistProvider: jiggyWaitlistProvider,
                               )
                             : DummyData.referralCode != null &&
-                                    jiggyWaitlistProvider.isUserNotLoggedIn
+                                    jiggyWaitlistProvider.userHasSignedUp
                                 ? LogIn(
                                     screenWidth: screenWidth,
                                     jiggyWaitlistProvider: jiggyWaitlistProvider)
@@ -586,8 +586,8 @@ class LogIn extends StatelessWidget {
               child: Center(
                 child: jiggyWaitlistProvider.isLoggingIn
                     ? const SizedBox(
-                        width: 10,
-                        height: 10,
+                        width: 40,
+                        height: 40,
                         child: CircularProgressIndicator(
                           color: AppColors.kWhite,
                         ),
@@ -787,7 +787,11 @@ class SignIn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: screenWidth > 450 ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+      crossAxisAlignment: screenWidth > 450
+          ? CrossAxisAlignment.start
+          : screenWidth > 450 && jiggyWaitlistProvider.isPostingWaitlistForm
+              ? CrossAxisAlignment.center
+              : CrossAxisAlignment.center,
       children: [
         Form(
           key: _signInFormKey,
@@ -884,8 +888,8 @@ class SignIn extends StatelessWidget {
             child: Center(
               child: jiggyWaitlistProvider.isPostingWaitlistForm
                   ? const SizedBox(
-                      width: 10,
-                      height: 10,
+                      width: 40,
+                      height: 40,
                       child: CircularProgressIndicator(
                         color: AppColors.kWhite,
                       ),

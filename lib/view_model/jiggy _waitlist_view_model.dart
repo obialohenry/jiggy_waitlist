@@ -23,10 +23,10 @@ class JiggyWaitlistViewModel extends ChangeNotifier {
   int? _expectedYearOfGraduation;
   bool _isPostingWaitlistForm = false;
   bool get isPostingWaitlistForm => _isPostingWaitlistForm;
-  bool _isLoggingIn = true;
+  bool _isLoggingIn = false;
   bool get isLoggingIn => _isLoggingIn;
-  bool _isUserNotLoggedIn = true;
-  bool get isUserNotLoggedIn => _isUserNotLoggedIn;
+  bool _userHasSignedUp = false;
+  bool get userHasSignedUp => _userHasSignedUp;
   TextEditingController _emailController = TextEditingController(text: DummyData.email);
   TextEditingController _phoneNumberController = TextEditingController();
   TextEditingController _expectedYearOfGraduationController = TextEditingController();
@@ -124,6 +124,7 @@ class JiggyWaitlistViewModel extends ChangeNotifier {
           DummyData.referralCode = decodedResponse["referral_code"];
           logger.i("referral code: ${decodedResponse["referral_code"]}");
           print("referral code: ${decodedResponse["referral_code"]}");
+          _userHasSignedUp = true;
           await saveEmailLocally(_emailController.text);
           await getLocallySavedEmail();
           await saveReferallCodeLocally(decodedResponse["referral_code"]);
